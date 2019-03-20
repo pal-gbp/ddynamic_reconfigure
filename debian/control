@@ -1,0 +1,12 @@
+Source: ros-kinetic-ddynamic-reconfigure
+Section: misc
+Priority: extra
+Maintainer: Hilario Tome <hilario.tome@pal-robotics.com>
+Build-Depends: debhelper (>= 9.0.0), google-mock, ros-kinetic-catkin, ros-kinetic-dynamic-reconfigure, ros-kinetic-roscpp, ros-kinetic-rostest
+Homepage: 
+Standards-Version: 3.9.2
+
+Package: ros-kinetic-ddynamic-reconfigure
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, ros-kinetic-dynamic-reconfigure, ros-kinetic-roscpp
+Description: The ddynamic_reconfigure package
