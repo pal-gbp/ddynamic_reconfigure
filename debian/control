@@ -1,0 +1,12 @@
+Source: ros-melodic-ddynamic-reconfigure
+Section: misc
+Priority: extra
+Maintainer: Hilario Tome <hilario.tome@pal-robotics.com>
+Build-Depends: debhelper (>= 9.0.0), google-mock, ros-melodic-catkin, ros-melodic-dynamic-reconfigure, ros-melodic-roscpp, ros-melodic-rostest
+Homepage: 
+Standards-Version: 3.9.2
+
+Package: ros-melodic-ddynamic-reconfigure
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, ros-melodic-dynamic-reconfigure, ros-melodic-roscpp
+Description: The ddynamic_reconfigure package
