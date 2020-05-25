@@ -1,0 +1,12 @@
+Source: ros-noetic-ddynamic-reconfigure
+Section: misc
+Priority: optional
+Maintainer: Hilario Tome <hilario.tome@pal-robotics.com>
+Build-Depends: debhelper (>= 9.0.0), google-mock, ros-noetic-catkin, ros-noetic-dynamic-reconfigure, ros-noetic-roscpp, ros-noetic-rostest
+Homepage: 
+Standards-Version: 3.9.2
+
+Package: ros-noetic-ddynamic-reconfigure
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, ros-noetic-dynamic-reconfigure, ros-noetic-roscpp
+Description: The ddynamic_reconfigure package
