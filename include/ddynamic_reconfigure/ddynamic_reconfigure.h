@@ -1,12 +1,32 @@
-///////////////////////////////////////////////////////////////////////////////
-
-// Copyright (C) 2014, 2015 PAL Robotics S.L.
-
-// All rights reserved.
-
-//////////////////////////////////////////////////////////////////////////////
-
-// Author Hilario Tomé
+/**
+ * Copyright 2019 PAL Robotics S.L.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ * 1. Redistributions of source code must retain the above copyright notice,
+ * this list of conditions and the following disclaimer.
+ *
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ * this list of conditions and the following disclaimer in the documentation
+ * and/or other materials provided with the distribution.
+ *
+ * 3. Neither the name of the copyright holder nor the names of its
+ * contributors may be used to endorse or promote products derived from this
+ * software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ */
 
 #ifndef _DDYNAMIC_RECONFIGURE_
 #define _DDYNAMIC_RECONFIGURE_
@@ -43,13 +63,15 @@ public:
    */
   template<typename T>
   void registerVariable(const std::string &name, T *variable,
-                        const std::string &description = "", T min = getMin<T>(), T max = getMax<T>());
+                        const std::string &description = "", T min = getMin<T>(), T max = getMax<T>(),
+                        const std::string &group = "Default");
 
   template<typename T>
   void registerEnumVariable(const std::string &name, T *variable,
                             const std::string &description = "",
                             std::map<std::string, T> enum_dict = {},
-                            const std::string &enum_description = "");
+                            const std::string &enum_description = "",
+                            const std::string &group = "Default");
 
   /**
    * @brief registerVariable register a variable to be modified via the
@@ -59,14 +81,16 @@ public:
   template <typename T>
   void registerVariable(const std::string &name, T current_value,
                         const boost::function<void(T value)> &callback,
-                        const std::string &description = "", T min = getMin<T>(), T max = getMax<T>());
+                        const std::string &description = "", T min = getMin<T>(), T max = getMax<T>(),
+                        const std::string &group = "Default");
   
   template <typename T>
   void registerEnumVariable(const std::string &name, T current_value,
                             const boost::function<void(T)> &callback,
                             const std::string &description,
                             std::map<std::string, T> enum_dict = {},
-                            const std::string &enum_description = "");
+                            const std::string &enum_description = "",
+                            const std::string &group = "Default");
   
   /**
    * @brief publishServicesTopics starts the server once all the needed variables are
@@ -124,6 +148,7 @@ private:
   std::vector<std::unique_ptr<RegisteredParam<double>>> registered_double_;
   std::vector<std::unique_ptr<RegisteredParam<bool>>> registered_bool_;
   std::vector<std::unique_ptr<RegisteredParam<std::string>>> registered_string_;
+  std::vector<std::string> config_groups_;
   
   UserCallbackType user_callback_;
   

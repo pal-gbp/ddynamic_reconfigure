@@ -1,10 +1,32 @@
-/*
-  @file
-  
-  @author victor
-  
-  @copyright (c) 2019 PAL Robotics SL. All Rights Reserved
-*/
+/**
+ * Copyright 2019 PAL Robotics S.L.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ * 1. Redistributions of source code must retain the above copyright notice,
+ * this list of conditions and the following disclaimer.
+ *
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ * this list of conditions and the following disclaimer in the documentation
+ * and/or other materials provided with the distribution.
+ *
+ * 3. Neither the name of the copyright holder nor the names of its
+ * contributors may be used to endorse or promote products derived from this
+ * software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ */
 #ifndef REGISTERED_PARAM_H
 #define REGISTERED_PARAM_H
 
@@ -21,13 +43,14 @@ class RegisteredParam
 public:
   RegisteredParam(const std::string &name, const std::string &description, T min_value,
                   T max_value, std::map<std::string, T> enum_dictionary = {},
-                  const std::string &enum_description = "")
+                  const std::string &enum_description = "", const std::string &group = "")
     : name_(name)
     , description_(description)
     , min_value_(min_value)
     , max_value_(max_value)
     , enum_dictionary_(enum_dictionary)
     , enum_description_(enum_description)
+    , group_(group)
   {
   }
   
@@ -132,6 +155,7 @@ public:
   const T max_value_;
   const std::map<std::string, T> enum_dictionary_;
   const std::string enum_description_;
+  const std::string group_;
 };
 
 
@@ -142,8 +166,8 @@ public:
   PointerRegisteredParam(const std::string &name, const std::string &description,
                          T min_value, T max_value, T *variable, 
                          std::map<std::string, T> enum_dictionary = {},
-                         const std::string &enum_description = "")
-    : RegisteredParam<T>(name, description, min_value, max_value, enum_dictionary, enum_description)
+                         const std::string &enum_description = "", const std::string &group = "")
+    : RegisteredParam<T>(name, description, min_value, max_value, enum_dictionary, enum_description, group)
     , variable_(variable)
   {
   }
@@ -168,8 +192,8 @@ public:
   CallbackRegisteredParam(const std::string &name, const std::string &description, T min_value,
                           T max_value, T current_value, boost::function<void(T value)> callback,
                           std::map<std::string, T> enum_dictionary = {}, 
-                          const std::string &enum_description = "")
-    : RegisteredParam<T>(name, description, min_value, max_value, enum_dictionary, enum_description)
+                          const std::string &enum_description = "", const std::string &group = "")
+    : RegisteredParam<T>(name, description, min_value, max_value, enum_dictionary, enum_description, group)
     , current_value_(current_value)
     , callback_(callback)
   {
