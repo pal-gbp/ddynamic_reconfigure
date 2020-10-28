@@ -1,3 +1,26 @@
+## ddynamic_reconfigure (melodic) - 0.3.2-1
+
+The packages in the `ddynamic_reconfigure` repository were released into the `melodic` distro by running `/usr/bin/bloom-release ddynamic_reconfigure --rosdistro melodic` on `Wed, 28 Oct 2020 08:13:02 -0000`
+
+The `ddynamic_reconfigure` package was released.
+
+Version of package(s) in repository `ddynamic_reconfigure`:
+
+- upstream repository: https://github.com/pal-robotics/ddynamic_reconfigure.git
+- release repository: https://github.com/pal-gbp/ddynamic_reconfigure.git
+- rosdistro version: `0.3.1-1`
+- old version: `0.3.1-1`
+- new version: `0.3.2-1`
+
+Versions of tools used:
+
+- bloom version: `0.9.8`
+- catkin_pkg version: `0.4.22`
+- rosdep version: `0.19.0`
+- rosdistro version: `0.8.2`
+- vcstools version: `0.1.42`
+
+
 ## ddynamic_reconfigure (melodic) - 0.3.1-1
 
 The packages in the `ddynamic_reconfigure` repository were released into the `melodic` distro by running `/usr/bin/bloom-release --rosdistro melodic --track melodic ddynamic_reconfigure` on `Thu, 08 Oct 2020 08:04:04 -0000`
