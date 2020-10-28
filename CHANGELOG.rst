@@ -2,6 +2,22 @@
 Changelog for package ddynamic_reconfigure
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+0.3.2 (2020-10-27)
+------------------
+* Merge branch 'pointer-with-callback' into 'erbium-devel'
+  Add new function that takes pointer and a callback
+  See merge request control/ddynamic_reconfigure!16
+* Add new function that takes pointer and a callback
+* Contributors: Victor Lopez, victor
+
+0.3.1 (2020-10-08)
+------------------
+* Merge pull request #18 from clearpathrobotics/issue_17
+  Reverse the order of creation of the topic publisher and rosservice
+* Reverse the order of creation of the topic publisher and rosservice to prevent startup race conditions leading to crash.
+  issue: #17
+* Contributors: Guillaume Autran, Victor Lopez
+
 0.3.0 (2020-05-04)
 ------------------
 * Merge pull request #12 from eurogroep/feat/groups
