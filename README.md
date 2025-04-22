@@ -1,3 +1,26 @@
+## ddynamic_reconfigure (noetic) - 0.4.2-1
+
+The packages in the `ddynamic_reconfigure` repository were released into the `noetic` distro by running `/usr/bin/bloom-release ddynamic_reconfigure --rosdistro noetic` on `Tue, 22 Apr 2025 09:06:59 -0000`
+
+The `ddynamic_reconfigure` package was released.
+
+Version of package(s) in repository `ddynamic_reconfigure`:
+
+- upstream repository: https://github.com/pal-robotics/ddynamic_reconfigure.git
+- release repository: https://github.com/pal-gbp/ddynamic_reconfigure.git
+- rosdistro version: `0.3.2-1`
+- old version: `0.3.2-1`
+- new version: `0.4.2-1`
+
+Versions of tools used:
+
+- bloom version: `0.10.7`
+- catkin_pkg version: `1.0.0`
+- rosdep version: `0.21.0`
+- rosdistro version: `0.8.3`
+- vcstools version: `0.1.42`
+
+
 ## ddynamic_reconfigure (noetic) - 0.3.2-1
 
 The packages in the `ddynamic_reconfigure` repository were released into the `noetic` distro by running `/usr/bin/bloom-release ddynamic_reconfigure --rosdistro noetic` on `Wed, 28 Oct 2020 08:22:08 -0000`
