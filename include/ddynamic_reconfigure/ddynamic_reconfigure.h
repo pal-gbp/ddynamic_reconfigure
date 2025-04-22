@@ -37,22 +37,28 @@
 #include <ros/ros.h>
 #include <ros/callback_queue.h>
 #include <ros/spinner.h>
+#include <atomic>
 
 namespace ddynamic_reconfigure
 {
 /**
  * @brief The DDynamicReconfigure class allows to use ROS dynamic reconfigure without the
  * need to write
- * a custom cpf file, variables are registered and exposed at run time. 
- * Modification of the variables is done through a variable pointer or through a callback function.
+ * a custom cpf file, variables are registered and exposed at run time.
+ * Modification of the variables is done through a variable pointer or through a callback
+ * function.
  */
 class DDynamicReconfigure
 {
 public:
   /**
     * @param nh the queue associated to this nh should spined() somewhere else
+    * @param auto_update - Update the variable values immediately on change by
+    * service call. When it is true, it is not Thread Safe. In case it is set to
+    * False, updateRegisteredVariablesData method needs to be called to update the
+    * registered variables
     */
-  DDynamicReconfigure(const ros::NodeHandle &nh = ros::NodeHandle("~"));
+  DDynamicReconfigure(const ros::NodeHandle &nh = ros::NodeHandle("~"), bool auto_update = true);
 
   virtual ~DDynamicReconfigure();
 
@@ -63,26 +69,27 @@ public:
    * @deprecated In the future this method will be merged with the registerVariable
    * that takes a pointer and a callback, but with the callback being optional
    */
-  template<typename T>
+  template <typename T>
   void registerVariable(const std::string &name, T *variable,
-                        const std::string &description = "", T min = getMin<T>(), T max = getMax<T>(),
-                        const std::string &group = "Default");
+                        const std::string &description = "", T min = getMin<T>(),
+                        T max = getMax<T>(), const std::string &group = "Default");
 
-  template<typename T>
+  template <typename T>
   void registerEnumVariable(const std::string &name, T *variable,
                             const std::string &description = "",
                             std::map<std::string, T> enum_dict = {},
                             const std::string &enum_description = "",
                             const std::string &group = "Default");
   /**
-   * @brief registerVariable like the functions above, but with a callback to be called when the
+   * @brief registerVariable like the functions above, but with a callback to be called
+   * when the
    * variable is changed from the dynamic_reconfigure API.
    */
   template <typename T>
   void registerVariable(const std::string &name, T *variable,
                         const boost::function<void(T value)> &callback,
-                        const std::string &description = "", T min = getMin<T>(), T max = getMax<T>(),
-                        const std::string &group = "Default");
+                        const std::string &description = "", T min = getMin<T>(),
+                        T max = getMax<T>(), const std::string &group = "Default");
 
   template <typename T>
   void registerEnumVariable(const std::string &name, T *variable,
@@ -102,9 +109,9 @@ public:
   template <typename T>
   void registerVariable(const std::string &name, T current_value,
                         const boost::function<void(T value)> &callback,
-                        const std::string &description = "", T min = getMin<T>(), T max = getMax<T>(),
-                        const std::string &group = "Default");
-  
+                        const std::string &description = "", T min = getMin<T>(),
+                        T max = getMax<T>(), const std::string &group = "Default");
+
   template <typename T>
   void registerEnumVariable(const std::string &name, T current_value,
                             const boost::function<void(T)> &callback,
@@ -112,46 +119,73 @@ public:
                             std::map<std::string, T> enum_dict = {},
                             const std::string &enum_description = "",
                             const std::string &group = "Default");
-  
+
   /**
    * @brief publishServicesTopics starts the server once all the needed variables are
    * registered
    */
-  void publishServicesTopics();
+  virtual void publishServicesTopics();
 
-  void updatePublishedInformation();
+  virtual void updatePublishedInformation();
 
   typedef boost::function<void()> UserCallbackType;
-  
+
   /**
-   * @brief setUserCallback An optional callback that will be called whenever a value is changed
+   * @brief setPreUpdateCallback An optional callback that will be called right before any value is
+   * changed
    */
-  void setUserCallback(const UserCallbackType &callback);
+  virtual void setPreUpdateCallback(const UserCallbackType &callback);
 
-  void clearUserCallback();
+  virtual void clearPreUpdateCallback();
 
-  
   /**
-   * Deprecated functions. For backwards compatibility, cannot be a template for legacy reasons
+   * @brief setPostUpdateCallback An optional callback that will be called right after any value is
+   * changed.
    */
-  void RegisterVariable(double *variable, std::string id, double min = -100, double max = 100);
-  
-  void RegisterVariable(int *variable, std::string id, int min = -100, int max = 100);
-  
-  void RegisterVariable(bool *variable, std::string id);
-  
-  void PublishServicesTopics();
+  virtual void setPostUpdateCallback(const UserCallbackType &callback);
 
-private:
+  virtual void clearPostUpdateCallback();
+
+  /**
+   * Deprecated functions. For backwards compatibility, cannot be a template for legacy
+   * reasons
+   */
+
+  /**
+   * @brief setUserCallback An optional callback that will be called whenever a value is
+   * changed. This is equivalent to the setPostUpdateCallback.
+   */
+  virtual void setUserCallback(const UserCallbackType &callback);
+
+  virtual void clearUserCallback();
+
+  virtual void RegisterVariable(double *variable, std::string id, double min = -100,
+                                double max = 100);
+
+  virtual void RegisterVariable(int *variable, std::string id, int min = -100, int max = 100);
+
+  virtual void RegisterVariable(bool *variable, std::string id);
+
+  virtual void PublishServicesTopics();
+
+  /**
+   * @brief updateRegisteredVariablesData - Method to be called to update the registered
+   * variable, incase the auto_update is not choosen
+   */
+  virtual void updateRegisteredVariablesData();
+
+protected:
   template <typename T>
   std::vector<std::unique_ptr<RegisteredParam<T>>> &getRegisteredVector();
 
-  dynamic_reconfigure::ConfigDescription generateConfigDescription() const;
+  virtual dynamic_reconfigure::ConfigDescription generateConfigDescription() const;
 
-  dynamic_reconfigure::Config generateConfig();
+  virtual dynamic_reconfigure::Config generateConfig();
 
-  bool setConfigCallback(dynamic_reconfigure::Reconfigure::Request &req,
-                         dynamic_reconfigure::Reconfigure::Response &rsp);
+  virtual bool setConfigCallback(dynamic_reconfigure::Reconfigure::Request &req,
+                                 dynamic_reconfigure::Reconfigure::Response &rsp);
+
+  virtual void updateConfigData(const dynamic_reconfigure::Config &config);
 
   /**
    * @brief setUserCallback Set a function to be called when parameters have changed
@@ -163,6 +197,9 @@ private:
   ros::Publisher descr_pub_;
 
   bool advertised_;
+  bool auto_update_;
+
+  std::atomic_bool new_config_avail_;
 
   // Registered variables
   std::vector<std::unique_ptr<RegisteredParam<int>>> registered_int_;
@@ -170,11 +207,13 @@ private:
   std::vector<std::unique_ptr<RegisteredParam<bool>>> registered_bool_;
   std::vector<std::unique_ptr<RegisteredParam<std::string>>> registered_string_;
   std::vector<std::string> config_groups_;
-  
-  UserCallbackType user_callback_;
-  
+
+  UserCallbackType pre_update_callback_;
+  UserCallbackType post_update_callback_;
+
   ros::Timer pub_config_timer_;
   dynamic_reconfigure::Config last_config_;
+  dynamic_reconfigure::Config updated_config_;
 };
 
 typedef boost::shared_ptr<DDynamicReconfigure> DDynamicReconfigurePtr;
